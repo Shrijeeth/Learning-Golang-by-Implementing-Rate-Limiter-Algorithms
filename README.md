@@ -120,12 +120,12 @@ func main() {
 
 ```text
 ├── rate_limiter/
+│   ├── mocks/
+│   │   └── redis_client_mock.go          # Mock Redis client for testing
 │   ├── rate_limiter.go           # Rate limiter interface definition
 │   ├── redis_client.go           # Redis client wrapper implementation
 │   └── redis_client_interface.go # Redis client interface definition
 ├── token_bucket_rate_limiter/
-│   ├── mocks/
-│   │   └── redis_client_mock.go          # Mock Redis client for testing
 │   ├── token_bucket_rate_limiter.go      # Token Bucket implementation
 │   ├── token_bucket_rate_limiter_suite_test.go  # Test suite setup
 │   └── token_bucket_ratelimiter_test.go  # Comprehensive test cases
