@@ -7,12 +7,12 @@ import (
 )
 
 type TokenBucketRateLimiter struct {
-	redisClient *rate_limiter.RedisClient
+	redisClient rate_limiter.RedisClientInterface
 	bucketCapacity int
 	refillRate float64
 }
 
-func NewTokenBucketRateLimiter(redisClient *rate_limiter.RedisClient, bucketCapacity int, refillRate float64) *TokenBucketRateLimiter {
+func NewTokenBucketRateLimiter(redisClient rate_limiter.RedisClientInterface, bucketCapacity int, refillRate float64) *TokenBucketRateLimiter {
 	return &TokenBucketRateLimiter{
 		redisClient: redisClient,
 		bucketCapacity: bucketCapacity,

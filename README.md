@@ -30,6 +30,20 @@ The Token Bucket algorithm is a flexible rate limiting mechanism that works as f
 - Uses Redis to store token counts and last refill timestamps
 - Thread-safe and suitable for distributed environments
 - Efficiently handles concurrent requests
+- Implements a time-based token refill mechanism
+- Automatically initializes new clients with a full bucket
+- Prevents bucket overflow during token refill
+
+**Testing:**
+
+- Comprehensive test suite using Ginkgo and Gomega
+- Tests cover all key scenarios:
+  - Initial bucket filling for new clients
+  - Token consumption for requests
+  - Time-based token refilling
+  - Bucket capacity enforcement
+  - Empty bucket handling
+  - Error handling for Redis failures
 
 ### Fixed Window Counter (Coming Soon)
 
@@ -106,10 +120,15 @@ func main() {
 
 ```text
 ├── rate_limiter/
-│   ├── rate_limiter.go      # Interface definition
-│   └── redis_client.go      # Redis client wrapper
+│   ├── rate_limiter.go           # Rate limiter interface definition
+│   ├── redis_client.go           # Redis client wrapper implementation
+│   └── redis_client_interface.go # Redis client interface definition
 ├── token_bucket_rate_limiter/
-│   └── token_bucket_rate_limiter.go  # Token Bucket implementation
+│   ├── mocks/
+│   │   └── redis_client_mock.go          # Mock Redis client for testing
+│   ├── token_bucket_rate_limiter.go      # Token Bucket implementation
+│   ├── token_bucket_rate_limiter_suite_test.go  # Test suite setup
+│   └── token_bucket_ratelimiter_test.go  # Comprehensive test cases
 └── [future_algorithm]/
     └── [future_algorithm].go  # Future algorithm implementations
 ```
