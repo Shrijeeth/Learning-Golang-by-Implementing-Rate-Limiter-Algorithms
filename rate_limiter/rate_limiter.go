@@ -1,5 +1,5 @@
 package rate_limiter
 
-type RateLimiter interface {
+type RateLimiterInterface interface {
 	LimitRequests(clientId string) bool
 }

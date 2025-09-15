@@ -36,7 +36,7 @@ func (t *TokenBucketRateLimiter) LimitRequests(clientId string) bool {
 	}
 
 	elapsedTimeSecs := currentTime - lastRefillTime
-	
+
 	tokensToAdd := int(elapsedTimeSecs) * int(t.refillRate)
 	tokenCount = min(t.bucketCapacity, tokenCount + tokensToAdd)
 

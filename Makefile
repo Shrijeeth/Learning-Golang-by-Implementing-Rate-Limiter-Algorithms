@@ -11,6 +11,10 @@ endif
 lint:
 	golangci-lint run
 
+build:
+	go mod vendor
+	go mod tidy
+
 test:
 	$(RM) coverage
 	$(MKDIR) coverage
