@@ -12,4 +12,6 @@ type RedisClientInterface interface {
 	IncrWithExpiry(key string, duration time.Duration, expiryMode ExpiryMode) (int64, error)
 	GetCountAndLastRefill(keyCount, keyLastRefill string) (int64, int, error)
 	SetCountAndLastRefill(keyCount, keyLastRefill string, tokenCount int, currentTime int64) error
+	HGetAll(key string) (map[string]string, error)
+	HIncrByWithExpiry(key string, value string, increment int64, duration time.Duration, expiryMode ExpiryMode) (int64, error)
 }

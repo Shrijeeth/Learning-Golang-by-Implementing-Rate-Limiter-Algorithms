@@ -24,7 +24,7 @@ func NewFixedWindowCounterRateLimiter(redisClient rate_limiter.RedisClientInterf
 func (f *FixedWindowCounterRateLimiter) LimitRequests(clientId string) bool {
 	key := "rate_limit:" + clientId
 	currentCounterStr, err := f.redisClient.Get(key)
-	
+
 	// If there's an error and it's not just an empty string (new client), reject the request
 	if err != nil {
 		return false

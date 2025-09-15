@@ -124,3 +124,34 @@ func (r *RedisClient) IncrWithExpiry(key string, duration time.Duration, expiryM
 	return incrResult, err
 }
 
+func (r *RedisClient) HGetAll(key string) (map[string]string, error) {
+	return r.client.HGetAll(r.ctx, key).Result()
+}
+
+func (r *RedisClient) HIncrByWithExpiry(key string, value string, increment int64, duration time.Duration, expiryMode ExpiryMode) (int64, error) {
+	var incrResult int64
+
+	_, err := r.client.TxPipelined(r.ctx, func(pipe redis.Pipeliner) error {
+		incrCmd := pipe.HIncrBy(r.ctx, key, value, increment)
+		incrResult = incrCmd.Val()
+
+		switch expiryMode {
+		case EXPIRY_MODE_DEFAULT:
+			pipe.HExpire(r.ctx, key, duration)
+		case EXPIRY_MODE_NX:
+			pipe.HExpireWithArgs(r.ctx, key, duration, redis.HExpireArgs{NX: true})
+		case EXPIRY_MODE_XX:
+			pipe.HExpireWithArgs(r.ctx, key, duration, redis.HExpireArgs{XX: true})
+		case EXPIRY_MODE_GT:
+			pipe.HExpireWithArgs(r.ctx, key, duration, redis.HExpireArgs{GT: true})
+		case EXPIRY_MODE_LT:
+			pipe.HExpireWithArgs(r.ctx, key, duration, redis.HExpireArgs{LT: true})
+		default:
+			return errors.New("INVALID EXPIRY MODE")
+		}
+
+		return nil
+	})
+
+	return incrResult, err
+}
