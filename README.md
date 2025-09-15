@@ -147,11 +147,11 @@ func main() {
     } else {
         fmt.Println("Request denied - rate limit exceeded")
     }
-    
+
     // Example 2: Fixed Window Counter Rate Limiter
     // Parameters: redisClient, windowSize (in seconds), limit
     fixedWindowRL := fixed_window_counter_ratelimiter.NewFixedWindowCounterRateLimiter(rlRedisClient, 60, 5)
-    
+
     // Check if request is allowed (5 requests per minute limit)
     if fixedWindowRL.LimitRequests(clientID) {
         fmt.Println("Request allowed")
@@ -159,46 +159,6 @@ func main() {
         fmt.Println("Request denied - rate limit exceeded")
     }
 }
-```
-
-**Testing:**
-
-- Comprehensive test suite using Ginkgo and Gomega
-- Tests cover all key scenarios:
-  - New client handling
-  - Request counting within limits
-  - Limit enforcement
-  - Window expiration and counter reset
-  - Error handling for Redis failures
-
-### Sliding Window Log (Coming Soon)
-
-The Sliding Window Log algorithm will be implemented soon.
-
-### Sliding Window Counter (Coming Soon)
-
-The Sliding Window Counter algorithm will be implemented soon.
-
-### Leaky Bucket (Coming Soon)
-
-The Leaky Bucket algorithm will be implemented soon.
-
-## Usage
-
-### Prerequisites
-
-- Go 1.25+
-- Redis server
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/Shrijeeth/Learning-Golang-by-Implementing-Rate-Limiter-Algorithms.git
-cd Learning-Golang-by-Implementing-Rate-Limiter-Algorithms
-
-# Install dependencies
-go mod download
 ```
 
 ## Project Structure
