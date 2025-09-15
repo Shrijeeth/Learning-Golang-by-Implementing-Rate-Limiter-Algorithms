@@ -24,21 +24,28 @@ func NewFixedWindowCounterRateLimiter(redisClient rate_limiter.RedisClientInterf
 func (f *FixedWindowCounterRateLimiter) LimitRequests(clientId string) bool {
 	key := "rate_limit:" + clientId
 	currentCounterStr, err := f.redisClient.Get(key)
+	
+	// If there's an error and it's not just an empty string (new client), reject the request
 	if err != nil {
 		return false
 	}
 
-	currentCounter, _ := strconv.Atoi(currentCounterStr)
+	// For new clients or expired windows, currentCounterStr will be empty
+	currentCounter := 0
+	if currentCounterStr != "" {
+		currentCounter, _ = strconv.Atoi(currentCounterStr)
+	}
+
+	// If counter is at or above limit, reject the request
 	if currentCounter >= f.limit {
 		return false
 	}
 
-	isAllowed := currentCounter < f.limit
-	if isAllowed {
-		incrResult, err := f.redisClient.IncrWithExpiry(key, time.Duration(f.windowSize) * time.Second, rate_limiter.EXPIRY_MODE_NX)
-		if err != nil || incrResult == 0 {
-			return false
-		}
+	// Request is allowed, increment the counter and set expiry
+	incrResult, err := f.redisClient.IncrWithExpiry(key, time.Duration(f.windowSize) * time.Second, rate_limiter.EXPIRY_MODE_NX)
+	if err != nil || incrResult == 0 {
+		return false
 	}
-	return isAllowed
+
+	return true
 }
