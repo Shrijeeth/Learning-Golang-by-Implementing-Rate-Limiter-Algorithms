@@ -19,6 +19,8 @@ type MockRedisClient struct {
 	IncrWithExpiryFunc        func(key string, duration time.Duration, expiryMode rate_limiter.ExpiryMode) (int64, error)
 	HGetAllFunc               func(key string) (map[string]string, error)
 	HIncrByWithExpiryFunc     func(key string, value string, increment int64, duration time.Duration, expiryMode rate_limiter.ExpiryMode) (int64, error)
+	HLenFunc                  func(key string) (int64, error)
+	HSetWithExpiryFunc        func(key string, value string, duration time.Duration, expiryMode rate_limiter.ExpiryMode) (int64, error)
 }
 
 // NewMockRedisClient creates a new mock Redis client
@@ -101,4 +103,18 @@ func (m *MockRedisClient) HIncrByWithExpiry(key string, value string, increment 
 		return m.HIncrByWithExpiryFunc(key, value, increment, duration, expiryMode)
 	}
 	return 0, errors.New("HIncrByWithExpiry not implemented")
+}
+
+func (m *MockRedisClient) HLen(key string) (int64, error) {
+	if m.HLenFunc != nil {
+		return m.HLenFunc(key)
+	}
+	return 0, errors.New("HLen not implemented")
+}
+
+func (m *MockRedisClient) HSetWithExpiry(key string, value string, duration time.Duration, expiryMode rate_limiter.ExpiryMode) (int64, error) {
+	if m.HSetWithExpiryFunc != nil {
+		return m.HSetWithExpiryFunc(key, value, duration, expiryMode)
+	}
+	return 0, errors.New("HSetWithExpiry not implemented")
 }

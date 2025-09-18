@@ -3,6 +3,7 @@ module github.com/Shrijeeth/Learning-Golang-by-Implementing-Rate-Limiter-Algorit
 go 1.25.1
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/onsi/ginkgo/v2 v2.25.1
 	github.com/onsi/gomega v1.38.2
 	github.com/redis/go-redis/v9 v9.14.0
